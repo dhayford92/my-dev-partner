@@ -1,0 +1,47 @@
+"""
+__Resource__ model. After editing: register this module in configs/database.py ORM_MODELS,
+then `aerich migrate --name "add___resource___table"` && `aerich upgrade`.
+"""
+from tortoise import fields
+from tortoise.models import Model
+
+# from enum import StrEnum
+# class __Resource__Status(StrEnum):
+#     ACTIVE = "active"
+#     ARCHIVED = "archived"
+
+
+class __Resource__Model(Model):
+    id = fields.UUIDField(pk=True)
+
+    # ── Fields ───────────────────────────────────────────────────────────────
+    name = fields.CharField(max_length=255, index=True)
+    description = fields.TextField(null=True)
+    # amount = fields.DecimalField(max_digits=12, decimal_places=2, default=0)
+    # status = fields.CharEnumField(__Resource__Status, max_length=50, default=__Resource__Status.ACTIVE)
+    # metadata = fields.JSONField(default=dict)
+
+    # ── Relations (each FK to the same model needs a UNIQUE related_name) ─────
+    # owner = fields.ForeignKeyField("models.ClientModel", related_name="__resources__")
+    # tags = fields.ManyToManyField("models.TagModel", related_name="__resources__", through="__resource___tags")
+
+    # ── Auditing ─────────────────────────────────────────────────────────────
+    created_by_id = fields.UUIDField(null=True)
+
+    # ── Timestamps + soft delete ─────────────────────────────────────────────
+    deleted_at = fields.DatetimeField(null=True)
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)
+
+    class Meta:
+        table = "__resources__"
+        ordering = ["-created_at"]
+        # indexes = [("status", "created_at")]
+        # unique_together = [("owner", "name")]
+
+    def __str__(self):
+        return f"__Resource__({self.name})"
+
+    @property
+    def is_deleted(self) -> bool:
+        return self.deleted_at is not None

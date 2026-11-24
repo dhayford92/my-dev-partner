@@ -1,0 +1,17 @@
+"""
+__Resource__ service — reusable domain logic for __resource__ (optional).
+
+Create this only when logic is shared across controllers or is non-trivial. Simple CRUD
+belongs in the controller. Static methods or a module-level singleton — match the codebase.
+"""
+import logging
+from uuid import UUID
+
+logger = logging.getLogger(__name__)
+
+
+class __Resource__Service:
+    @staticmethod
+    async def example_operation(__resource___id: UUID) -> None:
+        """TODO: reusable __resource__ operation."""
+        raise NotImplementedError

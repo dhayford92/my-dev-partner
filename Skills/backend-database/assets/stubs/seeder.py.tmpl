@@ -1,0 +1,36 @@
+"""
+__Resource__ seeder — idempotent. Run: python -m scripts.seed___resource__
+Register real seed data below; keep it safe to re-run (get_or_create / update-in-place).
+"""
+import asyncio
+
+from tortoise import Tortoise
+
+from configs.database import tortoise_config
+from src.apps.__domain__.models.__resource___model import __Resource__Model
+
+
+DATA = [
+    {"name": "Example 1"},
+    {"name": "Example 2"},
+]
+
+
+async def seed() -> None:
+    for row in DATA:
+        obj, created = await __Resource__Model.get_or_create(
+            name=row["name"], defaults=row,
+        )
+        print(f"  __resource__: {row['name']} {'(created)' if created else '(exists)'}")
+
+
+async def main() -> None:
+    await Tortoise.init(config=tortoise_config)
+    print("Seeding __resources__...")
+    await seed()
+    await Tortoise.close_connections()
+    print("Done.")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

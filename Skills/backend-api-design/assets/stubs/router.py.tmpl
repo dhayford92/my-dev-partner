@@ -1,0 +1,49 @@
+"""
+__Resource__ router. Final paths: /__domain__/api/v1/__persona__/__resources__/...
+"""
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, Request
+
+from configs.rate_limiting import limiter, RateLimitConfig
+from src.libs.auth import Current__Persona__User
+from src.schemas.shared.base import PaginationParams
+from src.schemas.shared.responses import SuccessResponse
+from src.schemas.__domain__.__resource___schemas import (
+    Create__Resource__Schema, Update__Resource__Schema, __Resource__DetailSchema, __Resource__ListSchema,
+)
+from src.apps.__domain__.controllers.__resource___controller import __Resource__Controller
+
+router = APIRouter(prefix="/__persona__/__resources__", tags=["__Resource__"])
+
+
+@router.get("", response_model=__Resource__ListSchema)
+async def list___resources__(auth: Current__Persona__User, params: PaginationParams = Depends()):
+    """List __resources__ (paginated)."""
+    return await __Resource__Controller.list(params)
+
+
+@router.get("/{__resource___id}", response_model=__Resource__DetailSchema)
+async def get___resource__(auth: Current__Persona__User, __resource___id: UUID):
+    """Get a single __resource__."""
+    return await __Resource__Controller.get(__resource___id)
+
+
+@router.post("", response_model=__Resource__DetailSchema, status_code=201)
+@limiter.limit(RateLimitConfig.CREATE_RESOURCE)
+async def create___resource__(request: Request, auth: Current__Persona__User, body: Create__Resource__Schema):
+    """Create a __resource__."""
+    return await __Resource__Controller.create(body, auth.user_id, request)
+
+
+@router.patch("/{__resource___id}", response_model=__Resource__DetailSchema)
+async def update___resource__(request: Request, auth: Current__Persona__User, __resource___id: UUID,
+                              body: Update__Resource__Schema):
+    """Update a __resource__."""
+    return await __Resource__Controller.update(__resource___id, body, auth.user_id, request)
+
+
+@router.delete("/{__resource___id}", response_model=SuccessResponse)
+async def delete___resource__(request: Request, auth: Current__Persona__User, __resource___id: UUID):
+    """Soft-delete a __resource__."""
+    return await __Resource__Controller.delete(__resource___id, auth.user_id, request)

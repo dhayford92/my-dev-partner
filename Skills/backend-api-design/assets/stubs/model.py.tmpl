@@ -1,0 +1,29 @@
+"""
+__Resource__ model. Add fields, then register this module in configs/database.py ORM_MODELS
+and run `aerich migrate --name "add___resource___table"`.
+(Full model conventions + indexing/relations live in the backend-database skill.)
+"""
+from tortoise import fields
+from tortoise.models import Model
+
+
+class __Resource__Model(Model):
+    id = fields.UUIDField(pk=True)
+
+    name = fields.CharField(max_length=255)
+    # TODO: add fields (see backend-database / ../../../_shared-backend/database.md)
+
+    deleted_at = fields.DatetimeField(null=True)
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)
+
+    class Meta:
+        table = "__resources__"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"__Resource__({self.name})"
+
+    @property
+    def is_deleted(self) -> bool:
+        return self.deleted_at is not None

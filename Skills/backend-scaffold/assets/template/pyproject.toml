@@ -1,0 +1,10 @@
+[project]
+name = "app-api"
+version = "1.0.0"
+description = "FastAPI + Tortoise ORM backend"
+requires-python = ">=3.12"
+
+[tool.aerich]
+tortoise_orm = "configs.database.tortoise_config"
+location = "./migrations"
+src_folder = "./."
