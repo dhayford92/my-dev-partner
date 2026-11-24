@@ -152,6 +152,7 @@ The conventions live in plain Markdown, so you can edit them to match your own s
 - Edit `assets/` templates to change the code that scaffolds and generators produce.
 - Edit `Skills/backend-architect/assets/ARCHITECTURE_TEMPLATE.md` to change the architecture interview defaults.
 
+
 ## License
 
-Add a license before publishing. [MIT](https://choosealicense.com/licenses/mit/) is a common choice for a project like this.
+MIT
